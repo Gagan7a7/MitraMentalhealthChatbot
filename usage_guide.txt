@@ -1,0 +1,64 @@
+Mental Health Chatbot Usage Guide
+
+This guide provides step-by-step instructions for setting up, running, and using the Mental Health Conversational AI Chatbot from start to finish.
+
+1. Preparation
+Before starting, make sure your system meets the requirements. Python 3.8 is needed for compatibility with the chatbot's dependencies. Having at least 2GB of free disk space and a stable internet connection ensures smooth installation and model downloads.
+
+2. Obtain Project Files
+Gather all project files in one folder. The main file, app.py, starts the chatbot server. requirements.txt lists all necessary Python packages. The templates/ and static/ folders contain the web interface and assets. model.h5, texts.pkl, and labels.pkl are generated after training and are required for intent classification. intents.json defines the chatbot's supported topics. training.py is used to train the intent model. readme_reportr.txt and usage_guide.txt provide documentation.
+
+3. Create and Activate Virtual Environment
+To keep dependencies isolated, create a virtual environment. Open a terminal in your project directory and run:
+  python -m venv venv
+This creates a folder named venv with a clean Python setup. Activate it before installing packages:
+  - On Windows Command Prompt: .\venv\Scripts\activate.bat
+  - On Windows PowerShell: .\venv\Scripts\Activate.ps1 (if you get a policy error, run: Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser)
+  - On Linux/Mac: source venv/bin/activate
+
+4. Install Dependencies
+Install all required Python packages by running:
+  pip install -r requirements.txt
+This command reads requirements.txt and installs Flask (for the web server), keras and tensorflow (for machine learning), nltk and spacy (for natural language processing), and other libraries needed for chatbot functionality.
+
+5. Download spaCy Model
+spaCy requires a language model for NLP tasks. Download it by running:
+  python -m spacy download en_core_web_sm
+This enables the chatbot to process and understand English text.
+
+6. Run the Chatbot Application
+Start the chatbot by running:
+  python app.py
+This launches the Flask web server and initializes the chatbot. On first run, it may download additional models (such as MarianMT for translation) from Hugging Face. Wait for all downloads to finish before using the chatbot.
+
+7. Access the Chatbot
+Once the server is running, open your web browser and go to:
+  http://localhost:5000
+You will see the chatbot’s web interface. You can now start chatting and exploring its features.
+
+8. Using the Chatbot
+Type your message in English or Hindi and press send. The chatbot will:
+  - Detect the language of your message
+  - Classify your intent (e.g., anxiety, stress, general support)
+  - Generate a smart reply using the Perplexity API
+If you send a message in Hindi, it will be translated to English for processing, and the reply will be translated back to Hindi. The chatbot is designed for open-ended mental health conversations and can be extended for healthcare topics. Note: Sentiment analysis is not enabled by default; you can add it using libraries like NLTK VADER or TextBlob.
+
+9. Troubleshooting
+If you encounter issues:
+  - Server stuck during model download: Check your internet connection and disk space.
+  - Import errors: Ensure your virtual environment is activated and Python 3.8 is being used.
+  - API errors: Verify your Perplexity API key is set correctly in app.py (or as an environment variable if supported).
+
+10. Extending the Chatbot
+You can customize and extend the chatbot:
+  - Add new intents by updating intents.json and retraining the model with training.py
+  - Integrate healthcare features, symptom checking, or connect to external APIs
+  - Modify the user interface by editing templates/index.html and static/ assets
+
+11. Stopping and Restarting
+To stop the chatbot server, press Ctrl+C in the terminal window. To restart, simply run python app.py again.
+
+12. Submission and Reporting
+For project submission, include both readme_reportr.txt and this usage guide. These documents provide all necessary setup, usage, and extension instructions for easy evaluation and reproduction.
+
+For further help, contact the project maintainer or refer to the README_REPORT.txt for technical details.

@@ -1,0 +1,228 @@
+Mental Health Conversational AI Chatbot (Healthcare)
+Main Project Report
+
+Title Page
+==========
+Project Title:  
+Mitra: Mental Health Conversational AI Chatbot (Healthcare)
+
+
+Abstract
+========
+This report presents Mitra—a mental health conversational AI chatbot designed to offer accessible, empathetic, and context-aware support. Combining neural intent recognition, generative AI, sentiment analysis, and multilingual support, Mitra responds to user needs with warmth and clarity, in both English and Hindi. By leveraging Perplexity API, Hugging Face models, Keras/TensorFlow, and rigorous intent training with student- and India-centric data, Mitra bridges gaps in mental healthcare for education, healthcare, and community settings. This report summarizes the motivation, architecture, datasets, model design, implementation, and real-world validation of Mitra, including module overviews and sample interactions.
+
+
+Introduction
+============
+Mental health is at the core of overall well-being. However, traditional access to mental health resources remains limited by stigma, availability of human counselors, language barriers, and reluctance to seek in-person help. Chatbots and conversational AI offer scalable, private, always-on support—if they can replicate empathy, detect risk, and understand context.  
+Mitra is designed to fill this gap: a bilingual (English/Hindi), approachable, and culturally relevant AI assistant—easy to use even for first-time digital mental health seekers.
+
+
+Problem Statement
+=================
+Despite heightened awareness of mental health, practical support is often out of reach due to:
+- Stigma and privacy concerns.
+- Shortage of professionals outside cities.
+- Language barriers that hamper communication and comfort.
+- Insufficient real-time, on-demand, and personalized digital solutions.
+
+These factors build an urgent case for Mitra: An always-available AI assistant that is multilingual, emotion-aware, safe, and tailored for real-world mental wellness conversations.
+
+
+Objectives
+==========
+- Build a conversational chatbot offering genuine, empathetic mental health support.
+- Enable automatic English-Hindi (and future) language switching and translation.
+- Implement both intent classification and generative fallback for always-on, context-aware dialogue.
+- Recognize emotional and crisis signals for urgent, life-saving intervention.
+- Provide a modern, accessible UI and modular, extensible backend for future healthcare expansion.
+
+
+Literature Review / Background
+==============================
+Recent Progress:
+- Transformer-based NLP models (BERT, GPT, MarianMT) and frameworks (HuggingFace, Keras/TensorFlow) allow deeper understanding, sentiment analysis, and multilingual engagement.
+
+Conversational AI in Healthcare:
+- Empathetic bots lower the threshold for help, provide anonymity, and can detect early risk factors—but require robust safety mechanisms and cultural fit, lacking in many generic AI deployments.
+
+Gaps:
+- Most chatbots lack Indian context, emergency escalation, or warm, ongoing engagement.
+- Mitra directly addresses these gaps by embedding Indian FAQ, crisis helpline, and emotional scaffolding.
+
+
+System Architecture
+===================
+Layered, Modular, Scalable:
+
+1. Backend (Python/Flask)  
+- Core HTTP server handling chat logic, session, and integration with AI models & APIs (located in app.py).
+
+2. NLP Pipeline  
+- spaCy: Language detection.  
+- Hugging Face Transformers: Sentiment & topic analysis.  
+- NLTK: Tokenization, preprocessing.  
+- MarianMT: Neural translation for Hindi-English seamless experience.
+
+3. Generative AI  
+- Perplexity API: Generates contextually relevant, empathetic answers for open-ended conversation.
+
+4. Intent Model  
+- Custom Keras/TensorFlow network trained on intents_master.json and real FAQs:  
+- Classifies inputs (greeting, anxiety, study stress, etc.), supporting both intent matching and robust fallback.
+
+5. Dataset Files  
+- Mental_Health_FAQ_cleaned.csv, Student_Mental_health_cleaned.csv:  
+Enrich classifier training and FAQ answering for real, regionally relevant questions.
+
+6. Frontend  
+- Responsive HTML/CSS/JS UI (index.html + bot.js) with avatars, quick actions, and accessibility for web and mobile.
+
+
+Model Description
+=================
+Data Preparation  
+- Data Sources:  
+  - intents_master.json: Manually labeled intents with diverse pattern-examples and responses.  
+  - FAQ and student survey CSVs: Used to robustly expand real situation coverage.
+- Processing:  
+  - All user patterns are tokenized, lemmatized (with NLTK/WordNet), stopwords/irrelevant punctuation removed.  
+  - Class labels (labels.pkl) and vocabulary (texts.pkl) generated and retained for use at runtime.
+
+Intent Model Neural Architecture  
+- Type: Feedforward neural network.  
+- Framework: Keras/TensorFlow.  
+- Structure:  
+  - Input: Bag-of-words vector.  
+  - Hidden: Dense (128 units, relu) → Dropout (0.5) → Dense (64, relu) → Dropout (0.5)  
+  - Output: Dense, softmax over intent classes.  
+- Optimizer: SGD with Nesterov momentum.  
+- Training: 200 epochs, small-batch (5).  
+- Output: model.h5, used by backend for intent scoring.
+
+Generative Model and Fallback  
+- Custom logic in backend determines confidence.  
+- If confidence is high, use trained/classified answer.  
+- If ambiguous or open-ended, route via Perplexity API for a generative, warm answer.  
+- Always escalate and bypass generative model for known crisis signals.
+
+Safety & Crisis Logic  
+- Model includes logic for keyword/semantic detection of risk (crisis, self-harm, suicide) and bypasses regular logic:  
+Immediately sends validated, local helpline (Tele-MANAS 14416, 988, 741741).
+
+
+Technologies Used
+=================
+- Python 3.8+, Flask, Keras/TensorFlow, Hugging Face Transformers, spaCy, MarianMT, NLTK.  
+- HTML/CSS/JS for modern frontend.  
+- Perplexity API for natural language generation fallback.
+
+
+Data Flow & Processing Pipeline
+===============================
+1. User submits message via web chat.  
+2. spaCy detects language.  
+3. MarianMT translates, if needed.  
+4. Hugging Face and custom model classify sentiment, intent.  
+5. Generates/retrieves answer:  
+   - Direct model or FAQ for known pattern,  
+   - Generative API for open-ended,  
+   - Crisis escalation for emergencies.  
+6. Translates (if needed) and sends back.  
+7. Logs (anonymized) for improvement.
+
+
+Training & Evaluation
+=====================
+- Intent classifier trained (see training.py), evaluated for multi-intent coverage, accuracy, recall.  
+- Manual emulation and live testing for empathy, engagement, and escalation.  
+- Sample and edge-case validation via custom scripts.
+
+
+User Interface
+==============
+- Fully responsive, branded “Mitra” chat window with:  
+   - Avatars for bot and user.  
+   - Visible online status, clock, quick actions.  
+   - Welcome & scope boundary in-welcome message.
+
+
+Multilingual & Sentiment Support
+================================
+- Seamless English/Hindi switching.  
+- Always responds in user’s language.  
+- Recognizes and adapts to emotional state in replies.
+
+
+Perplexity API Use
+==================
+- Returns emotionally rich, context-aware responses for new, untrained, or ambiguous scenarios.
+
+
+Example Conversations
+=====================
+User Input                              | Mitra Response
+--------------------------------------|---------------------------------------------------------
+hello                                 | Great to see you. How do you feel currently?
+I'm feeling worried                   | I'm really sorry you're feeling worried right now—that can be so tough. Try slow deep breaths or grounding exercises.
+Can you walk me through a breathing exercise? | Absolutely! Breathe in slowly through your nose, feel your chest rise, then exhale gently…
+I want to hurt myself                 | I'm very worried about you now. Please call 988 or 14416 for immediate help. You're not alone.
+Can you tell me about the Tele-MANAS helpline? | The Tele-MANAS helpline is 14416, a free, 24x7 mental health counseling service in India.
+Tell me a joke                      | I’m here specifically to support your mental health and wellbeing. How can I assist you with that today?
+I need help prioritizing tasks       | Breaking big tasks into smaller steps helps. You're not alone—writing things down often clarifies priorities.
+
+
+Module Descriptions
+===================
+- app.py: Backend serving API, intent model, generative flow, crisis, and translation logic.  
+- training.py: Data cleaning/augmentation, model training routines.  
+- Data (CSV/JSON): intents_master.json, Mental_Health_FAQ_cleaned.csv, Student_Mental_health_cleaned.csv contribute to both training and dynamic FAQ responses.  
+- Frontend (index.html, bot.js): Chat UI, branding, input/output, quick actions.  
+- Model Files: model.h5, labels.pkl, texts.pkl for fast runtime inference.  
+- Documentation/Guide: Setup, usage, troubleshooting (usage_guide.txt, Readme_report.txt).
+
+
+Testing & Validation
+====================
+- Manual: Diverse scenario interaction, including supportive, ambiguous, and critical cases.  
+- Automated: Optional Python scripts for endpoint testing.  
+- Empathy & Safety: Conversation logs show correct crisis handling; always warm, professional, and bounded.
+
+
+Troubleshooting / Limitations
+============================
+- API or model download errors: check network, Python environment, and dependent models.  
+- Not a replacement for clinical, in-person emergency care.  
+- Relies on maintained API keys and up-to-date model files.
+
+
+Future Work
+===========
+- More languages/regional coverage.  
+- In-depth sentiment tracking.  
+- Integration with hospital/provider APIs for live referrals and scheduling.  
+- Enhanced, interactive UI (with media, grounding tools).
+
+
+Conclusion
+==========
+Mitra demonstrates how an AI-powered conversational agent, trained and designed with real user needs, localized intent data, and robust safety logic, can make mental health support more empathetic, accessible, and immediately responsive. Its privacy, adaptability, and scope-aware engagement define a clear advance over typical chatbot deployments.
+
+
+References
+==========
+- Hugging Face Transformers Docs  
+- spaCy Docs  
+- MarianMT (Helsinki-NLP)  
+- Perplexity API Docs  
+- Keras/TensorFlow Docs  
+- NLTK Docs  
+- MoHFW Tele-MANAS: https://telemanas.mohfw.gov.in/
+
+
+Appendix
+========
+- Additional logs from real sample conversations.  
+- UI screenshots (see screenshots folder).  
+- Key excerpts of app.py, bot.js for setup and logic verification.
+
