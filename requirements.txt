@@ -23,3 +23,4 @@ pandas
 fuzzywuzzy
 python-Levenshtein
 textblob
+openai>=1.0.0

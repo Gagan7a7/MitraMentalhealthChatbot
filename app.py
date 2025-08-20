@@ -28,8 +28,9 @@ lemmatizer = WordNetLemmatizer()
 app = Flask(__name__)
 app.static_folder = 'static'
 
-# Perplexity API configuration
-PERPLEXITY_API_KEY = "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"
+# OpenAI API configuration
+import os
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "your-openai-api-key-here")  # Replace with your OpenAI API key
 
 class MentalHealthBoundaryChecker:
     """Check if user input is within mental health domain"""
@@ -88,10 +89,10 @@ class MentalHealthBoundaryChecker:
         # If unclear, assume it might be mental health related (better safe than sorry)
         return True, 'unclear'
 
-def get_perplexity_response(user_message, matched_intent=None, intent_response=None, context_info=None):
-    """Get response from Perplexity API with enhanced mental health context"""
+def get_openai_response(user_message, matched_intent=None, intent_response=None, context_info=None):
+    """Get response from OpenAI API with enhanced mental health context"""
     headers = {
-        "Authorization": f"Bearer {PERPLEXITY_API_KEY}",
+        "Authorization": f"Bearer {OPENAI_API_KEY}",
         "Content-Type": "application/json"
     }
     
@@ -125,11 +126,12 @@ Your goal is to make students feel heard, supported, and less alone in their str
     if context_info:
         context += f"\nAdditional context: {context_info}"
     
-    user_prompt = f"{system_prompt}{context}\n\nStudent: {user_message}\nMitra:"
+    user_prompt = f"Student: {user_message}\nMitra:"
     
     data = {
-        "model": "sonar-pro",
+        "model": "gpt-3.5-turbo",
         "messages": [
+            {"role": "system", "content": system_prompt + context},
             {"role": "user", "content": user_prompt}
         ],
         "max_tokens": 120,
@@ -137,17 +139,17 @@ Your goal is to make students feel heard, supported, and less alone in their str
     }
     
     try:
-        response = requests.post("https://api.perplexity.ai/chat/completions", 
+        response = requests.post("https://api.openai.com/v1/chat/completions", 
                                headers=headers, json=data, timeout=10)
         if response.status_code == 200:
             result = response.json()
             bot_response = result["choices"][0]["message"]["content"].strip()
             return clean_response(bot_response)
         else:
-            print(f"Perplexity API error: {response.status_code} - {response.text}")
+            print(f"OpenAI API error: {response.status_code} - {response.text}")
             return get_fallback_response(matched_intent, intent_response)
     except Exception as e:
-        print(f"Perplexity API exception: {str(e)}")
+        print(f"OpenAI API exception: {str(e)}")
         return get_fallback_response(matched_intent, intent_response)
 
 def clean_response(response):
@@ -390,13 +392,13 @@ def chatbot_response(msg):
         elif 0.4 <= confidence <= 0.7 and matched_intent and intent_response:
             print("Using API with model context (medium confidence)")
             context_info = f"Sentiment: {sentiment_category}, Intent: {matched_intent}, Confidence: {confidence:.3f}"
-            response = get_perplexity_response(msg, matched_intent, intent_response, context_info)
+            response = get_openai_response(msg, matched_intent, intent_response, context_info)
         
         # For low confidence (<0.4), use pure API but with mental health context
         else:
             print("Using pure API response (low/no intent confidence)")
             context_info = f"Sentiment: {sentiment_category}, Category: {category}"
-            response = get_perplexity_response(msg, context_info=context_info)
+            response = get_openai_response(msg, context_info=context_info)
         
         # Execute model response if decided
         if use_model_response and intent_response:
@@ -449,7 +451,7 @@ def get_bot_response():
 
 if __name__ == "__main__":
     print("🤖 Starting Enhanced Mental Health Chatbot for Students...")
-    print("✅ Perplexity API integration: Active")
+    print("✅ OpenAI API integration: Active")
     print("✅ Mental health boundary checking: Active")
     print("✅ Crisis detection: Active")
     print("✅ Student-focused responses: Active")
