@@ -9,7 +9,7 @@ Mitra: Mental Health Conversational AI Chatbot (Healthcare)
 
 Abstract
 ========
-This report presents Mitra—a mental health conversational AI chatbot designed to offer accessible, empathetic, and context-aware support. Combining neural intent recognition, generative AI, sentiment analysis, and multilingual support, Mitra responds to user needs with warmth and clarity, in both English and Hindi. By leveraging Perplexity API, Hugging Face models, Keras/TensorFlow, and rigorous intent training with student- and India-centric data, Mitra bridges gaps in mental healthcare for education, healthcare, and community settings. This report summarizes the motivation, architecture, datasets, model design, implementation, and real-world validation of Mitra, including module overviews and sample interactions.
+This report presents Mitra—a mental health conversational AI chatbot designed to offer accessible, empathetic, and context-aware support. Combining neural intent recognition, generative AI, sentiment analysis, and multilingual support, Mitra responds to user needs with warmth and clarity, in both English and Hindi. By leveraging OpenAI API, Hugging Face models, Keras/TensorFlow, and rigorous intent training with student- and India-centric data, Mitra bridges gaps in mental healthcare for education, healthcare, and community settings. This report summarizes the motivation, architecture, datasets, model design, implementation, and real-world validation of Mitra, including module overviews and sample interactions.
 
 
 Introduction
@@ -65,7 +65,7 @@ Layered, Modular, Scalable:
 - MarianMT: Neural translation for Hindi-English seamless experience.
 
 3. Generative AI  
-- Perplexity API: Generates contextually relevant, empathetic answers for open-ended conversation.
+- OpenAI API: Generates contextually relevant, empathetic answers for open-ended conversation.
 
 4. Intent Model  
 - Custom Keras/TensorFlow network trained on intents_master.json and real FAQs:  
@@ -103,7 +103,7 @@ Intent Model Neural Architecture
 Generative Model and Fallback  
 - Custom logic in backend determines confidence.  
 - If confidence is high, use trained/classified answer.  
-- If ambiguous or open-ended, route via Perplexity API for a generative, warm answer.  
+- If ambiguous or open-ended, route via OpenAI API for a generative, warm answer.  
 - Always escalate and bypass generative model for known crisis signals.
 
 Safety & Crisis Logic  
@@ -115,7 +115,7 @@ Technologies Used
 =================
 - Python 3.8+, Flask, Keras/TensorFlow, Hugging Face Transformers, spaCy, MarianMT, NLTK.  
 - HTML/CSS/JS for modern frontend.  
-- Perplexity API for natural language generation fallback.
+- OpenAI API for natural language generation fallback.
 
 
 Data Flow & Processing Pipeline
@@ -154,7 +154,7 @@ Multilingual & Sentiment Support
 - Recognizes and adapts to emotional state in replies.
 
 
-Perplexity API Use
+OpenAI API Use
 ==================
 - Returns emotionally rich, context-aware responses for new, untrained, or ambiguous scenarios.
 
@@ -214,7 +214,7 @@ References
 - Hugging Face Transformers Docs  
 - spaCy Docs  
 - MarianMT (Helsinki-NLP)  
-- Perplexity API Docs  
+- OpenAI API Docs  
 - Keras/TensorFlow Docs  
 - NLTK Docs  
 - MoHFW Tele-MANAS: https://telemanas.mohfw.gov.in/
