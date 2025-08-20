@@ -29,7 +29,7 @@ app = Flask(__name__)
 app.static_folder = 'static'
 
 # Perplexity API configuration
-PERPLEXITY_API_KEY = "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"
+PERPLEXITY_API_KEY = "your api key"
 
 class MentalHealthBoundaryChecker:
     """Check if user input is within mental health domain"""
@@ -469,4 +469,5 @@ if __name__ == "__main__":
         
     print("🌐 Server starting on http://localhost:5000")
     print("💚 Ready to support student mental health!")
+
     app.run(debug=True, port=5000)
